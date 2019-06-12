@@ -14,9 +14,11 @@ import createDataset as cdata
 
 def scrapeFeatures(audio_save, estimators,r_state):
     
+    print("Creazione Dataset Random Forest...")
     X_train,y_train,X_test,y_test = cdata.createDataset(audio_save,r_state)
     
-    sel = SelectFromModel(RandomForestClassifier(n_estimators = estimators))
+    print("Addestramento Random Forest...")
+    sel = SelectFromModel(RandomForestClassifier(n_estimators = estimators, random_state=r_state))
     sel.fit(X_train, X_test)
     
     sel.get_support()

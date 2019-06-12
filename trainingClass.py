@@ -7,7 +7,6 @@ Created on Tue Jun  4 20:06:21 2019
 from GMM import GMM
 
 class trainingClass:
-    Training_info = None;
         
     def __init__(self, size, output_wavefile):
         self.Training_info = GMM(size, output_wavefile);
