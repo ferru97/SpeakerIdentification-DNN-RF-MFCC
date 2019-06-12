@@ -1,7 +1,7 @@
 import os
-
+"""
 os.environ["CUDA_VISIBLE_DEVICES"]="-1"
-
+"""
 
 import struct
 import sys
@@ -90,13 +90,13 @@ class MyApp(QMainWindow):
     def load_samples_event(self):
         self.names = ['Dataset Voci/Confessioni di una mente pericolosa_15sec/MusicaConfession_15sec', 
                       'Dataset Voci/Confessioni di una mente pericolosa_15sec/RockwellConfession_15sec', 
-                      'Dataset Voci/Confessioni di una mente pericolosa_15sec/SergenteConfesion_15sec', 
-                      'Dataset Voci/Confessioni di una mente pericolosa_15sec/SilenzioConfessions_15sec']
+                      'Dataset Voci/Confessioni di una mente pericolosa_15sec/SilenzioConfessions_15sec', 
+                      'Dataset Voci/Confessioni di una mente pericolosa_15sec/SergenteConfesion_15sec']
         self.n = len(self.names)
         self.train()
         self.switch_train_functions(False)
         
-        self.names_test = ['Voci/ConfessionsOfdangerous_test10min']
+        self.names_test = ['Voci/ConfessionsOfdangerous_test10minlow']
 
     # noinspection PyArgumentList
     def load_wav_files(self):
@@ -174,22 +174,24 @@ class MyApp(QMainWindow):
             trainer = trainingClass.trainingClass(32,name + '.wav')
             objects.append(trainer);
             idx += 1
+            """
+        if os.path.isfile(self.nome_file + 'good_feat_index.npy'):    
+            selected_feat = np.load(self.nome_file + 'good_feat_index.npy');    
+        else:
+            selected_feat = scrape.scrapeFeatures(self.names,10,2);
+            np.save(self.nome_file+'good_feat_index', np.array(selected_feat));
             
-        selected_feat = scrape.scrapeFeatures(self.names,10,2);
-            
-        print("Ottimizzazione Fetures")
-        idx = 0
-        for name in self.names:
-            print("File: "+name)
-            trainer2 = objects.pop();
-            trainer2.adjustFeatures(name,selected_feat)
-            self.p_weight[idx] = trainer2.Training_feature_Weight()
-            self.mean[idx] = trainer2.Training_feature_Mean()
-            self.covar[idx] = trainer2.Training_feature_Covar()
-            idx += 1
-            
-        print("Features Test")
-        gmm.GMM(32,self.names_test);
+            print("Ottimizzazione Fetures")
+            idx = 0
+            for name in self.names:
+                print("File: "+name)
+                trainer2 = objects.pop();
+                trainer2.adjustFeatures(name,selected_feat)
+                self.p_weight[idx] = trainer2.Training_feature_Weight()
+                self.mean[idx] = trainer2.Training_feature_Mean()
+                self.covar[idx] = trainer2.Training_feature_Covar()
+                idx += 1
+            """
 
         # noinspection PyCallByClass,PyArgumentList
         QMessageBox.information(
